@@ -5,10 +5,18 @@ const categoryRouter = Router();
 
 categoryRouter.get("/", categoryController.categoryList);
 categoryRouter.get("/new", categoryController.categoryCreateGet);
-categoryRouter.post("/new", categoryController.categoryCreatePost);
+categoryRouter.post(
+  "/new",
+  categoryController.validateCategory,
+  categoryController.categoryCreatePost,
+);
 categoryRouter.get("/:id", categoryController.categoryDetail);
 categoryRouter.get("/:id/edit", categoryController.categoryUpdateGet);
-categoryRouter.post("/:id/edit", categoryController.categoryUpdatePost);
+categoryRouter.post(
+  "/:id/edit",
+  categoryController.validateCategory,
+  categoryController.categoryUpdatePost,
+);
 categoryRouter.post("/:id/delete", categoryController.categoryDeletePost);
 
 module.exports = categoryRouter;

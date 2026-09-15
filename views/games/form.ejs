@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+</head>
+<body>
+  <header>
+    <h1><%= title %></h1>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="/categories">Categories</a>
+      <a href="/games">Games</a>
+    </nav>
+  </header>
+
+  <main>
+    <% if (errors.length > 0) { %>
+      <ul>
+        <% errors.forEach((error) => { %>
+          <li><%= error.msg %></li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <form method="post" action="<%= action %>">
+      <div>
+        <label for="title">Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value="<%= game.title %>"
+          minlength="1"
+          maxlength="200"
+          required
+        >
+      </div>
+
+      <div>
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          maxlength="1000"
+          rows="5"
+        ><%= game.description || "" %></textarea>
+      </div>
+
+      <div>
+        <label for="price">Price</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          value="<%= game.price %>"
+          min="0"
+          step="0.01"
+          required
+        >
+      </div>
+
+      <div>
+        <label for="stock_quantity">Stock quantity</label>
+        <input
+          type="number"
+          id="stock_quantity"
+          name="stock_quantity"
+          value="<%= game.stock_quantity %>"
+          min="0"
+          step="1"
+          required
+        >
+      </div>
+
+      <div>
+        <label for="category_id">Category</label>
+        <select id="category_id" name="category_id" required>
+          <option value="">Select a category</option>
+
+          <% categories.forEach((category) => { %>
+            <option
+              value="<%= category.id %>"
+              <%= Number(category.id) === Number(game.category_id)
+                ? "selected"
+                : "" %>
+            >
+              <%= category.name %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+
+      <button type="submit"><%= submitLabel %></button>
+    </form>
+  </main>
+</body>
+</html>
