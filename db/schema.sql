@@ -1,0 +1,18 @@
+CREATE TABLE categories (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
+);
+
+CREATE TABLE games (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title VARCHAR(200) NOT NULL,
+  description TEXT,
+  price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
+  stock_quantity INTEGER NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
+  category_id INTEGER NOT NULL,
+  CONSTRAINT games_category_fk
+    FOREIGN KEY (category_id)
+    REFERENCES categories(id)
+    ON DELETE RESTRICT
+);
