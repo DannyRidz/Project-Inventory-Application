@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+</head>
+<body>
+  <header>
+    <h1><%= title %></h1>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="/categories">Categories</a>
+      <a href="/games">Games</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Categories</h2>
+
+    <% if (categories.length === 0) { %>
+      <p>No categories have been added yet.</p>
+    <% } else { %>
+      <ul>
+        <% categories.forEach((category) => { %>
+          <li>
+            <a href="/categories/<%= category.id %>">
+              <%= category.name %>
+            </a>
+
+            <% if (category.description) { %>
+              <p><%= category.description %></p>
+            <% } %>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <a href="/categories/new">Add a category</a>
+  </main>
+</body>
+</html>
