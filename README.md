@@ -2,6 +2,10 @@
 
 An inventory management application for an imaginary video games store.
 
+## Live demo
+
+https://project-inventory-application-production-0f37.up.railway.app
+
 ## Features
 
 - List all categories on the homepage.
