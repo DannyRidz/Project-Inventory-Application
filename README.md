@@ -13,6 +13,8 @@ https://project-inventory-application-production-0f37.up.railway.app
 - View a game's details.
 - Create, edit, and delete categories.
 - Create, edit, and delete games.
+- Responsive dark interface for desktop and mobile screens.
+- Admin-password confirmation for update and delete actions.
 
 ## Database plan
 

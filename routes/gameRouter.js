@@ -15,8 +15,13 @@ gameRouter.get("/:id/edit", gameController.gameUpdateGet);
 gameRouter.post(
   "/:id/edit",
   gameController.validateGame,
+  gameController.validateAdminPassword,
   gameController.gameUpdatePost,
 );
-gameRouter.post("/:id/delete", gameController.gameDeletePost);
+gameRouter.post(
+  "/:id/delete",
+  gameController.validateAdminPassword,
+  gameController.gameDeletePost,
+);
 
 module.exports = gameRouter;

@@ -15,8 +15,13 @@ categoryRouter.get("/:id/edit", categoryController.categoryUpdateGet);
 categoryRouter.post(
   "/:id/edit",
   categoryController.validateCategory,
+  categoryController.validateAdminPassword,
   categoryController.categoryUpdatePost,
 );
-categoryRouter.post("/:id/delete", categoryController.categoryDeletePost);
+categoryRouter.post(
+  "/:id/delete",
+  categoryController.validateAdminPassword,
+  categoryController.categoryDeletePost,
+);
 
 module.exports = categoryRouter;

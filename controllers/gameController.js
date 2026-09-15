@@ -1,5 +1,8 @@
 const db = require("../db/queries");
 const { body, validationResult } = require("express-validator");
+const validateAdminPassword = require("../middleware/validateAdminPassword");
+
+exports.validateAdminPassword = validateAdminPassword;
 
 exports.validateGame = [
   body("title")
@@ -42,6 +45,7 @@ exports.gameDetail = async (req, res) => {
   res.render("games/detail", {
     title: game.title,
     game,
+    deleteError: null,
   });
 };
 
@@ -61,6 +65,7 @@ exports.gameCreateGet = async (req, res) => {
     errors: [],
     action: "/games/new",
     submitLabel: "Create game",
+    requiresAdmin: false,
   });
 };
 
@@ -77,6 +82,7 @@ exports.gameCreatePost = async (req, res) => {
       errors: errors.array(),
       action: "/games/new",
       submitLabel: "Create game",
+      requiresAdmin: false,
     });
   }
 
@@ -92,6 +98,7 @@ exports.gameCreatePost = async (req, res) => {
       errors: [{ msg: "The selected category does not exist." }],
       action: "/games/new",
       submitLabel: "Create game",
+      requiresAdmin: false,
     });
   }
 
@@ -123,6 +130,7 @@ exports.gameUpdateGet = async (req, res) => {
     errors: [],
     action: `/games/${game.id}/edit`,
     submitLabel: "Save changes",
+    requiresAdmin: true,
   });
 };
 
@@ -142,6 +150,7 @@ exports.gameUpdatePost = async (req, res) => {
       errors: errors.array(),
       action: `/games/${req.params.id}/edit`,
       submitLabel: "Save changes",
+      requiresAdmin: true,
     });
   }
 
@@ -160,6 +169,7 @@ exports.gameUpdatePost = async (req, res) => {
       errors: [{ msg: "The selected category does not exist." }],
       action: `/games/${req.params.id}/edit`,
       submitLabel: "Save changes",
+      requiresAdmin: true,
     });
   }
 
@@ -180,11 +190,23 @@ exports.gameUpdatePost = async (req, res) => {
 };
 
 exports.gameDeletePost = async (req, res) => {
-  const game = await db.deleteGame(req.params.id);
+  const existingGame = await db.getGameById(req.params.id);
 
-  if (!game) {
+  if (!existingGame) {
     return res.status(404).send("Game not found");
   }
+
+  const passwordErrors = validationResult(req);
+
+  if (!passwordErrors.isEmpty()) {
+    return res.status(403).render("games/detail", {
+      title: existingGame.title,
+      game: existingGame,
+      deleteError: passwordErrors.array()[0].msg,
+    });
+  }
+
+  await db.deleteGame(req.params.id);
 
   res.redirect("/games");
 };

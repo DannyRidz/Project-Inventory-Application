@@ -1,5 +1,8 @@
 const db = require("../db/queries");
 const { body, validationResult } = require("express-validator");
+const validateAdminPassword = require("../middleware/validateAdminPassword");
+
+exports.validateAdminPassword = validateAdminPassword;
 
 exports.validateCategory = [
   body("name")
@@ -52,6 +55,7 @@ exports.categoryCreateGet = (req, res) => {
     errors: [],
     action: "/categories/new",
     submitLabel: "Create category",
+    requiresAdmin: false,
   });
 };
 
@@ -65,6 +69,7 @@ exports.categoryCreatePost = async (req, res) => {
       errors: errors.array(),
       action: "/categories/new",
       submitLabel: "Create category",
+      requiresAdmin: false,
     });
   }
 
@@ -83,6 +88,7 @@ exports.categoryCreatePost = async (req, res) => {
         errors: [{ msg: "A category with that name already exists." }],
         action: "/categories/new",
         submitLabel: "Create category",
+        requiresAdmin: false,
       });
     }
 
@@ -103,6 +109,7 @@ exports.categoryUpdateGet = async (req, res) => {
     errors: [],
     action: `/categories/${category.id}/edit`,
     submitLabel: "Save changes",
+    requiresAdmin: true,
   });
 };
 
@@ -119,6 +126,7 @@ exports.categoryUpdatePost = async (req, res) => {
       errors: errors.array(),
       action: `/categories/${req.params.id}/edit`,
       submitLabel: "Save changes",
+      requiresAdmin: true,
     });
   }
 
@@ -145,6 +153,7 @@ exports.categoryUpdatePost = async (req, res) => {
         errors: [{ msg: "A category with that name already exists." }],
         action: `/categories/${req.params.id}/edit`,
         submitLabel: "Save changes",
+        requiresAdmin: true,
       });
     }
 
@@ -162,6 +171,17 @@ exports.categoryDeletePost = async (req, res) => {
 
   if (!category) {
     return res.status(404).send("Category not found");
+  }
+
+  const passwordErrors = validationResult(req);
+
+  if (!passwordErrors.isEmpty()) {
+    return res.status(403).render("categories/detail", {
+      title: category.name,
+      category,
+      games,
+      deleteError: passwordErrors.array()[0].msg,
+    });
   }
 
   if (games.length > 0) {
