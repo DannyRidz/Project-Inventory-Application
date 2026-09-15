@@ -41,6 +41,17 @@
       <a href="/categories/<%= category.id %>/edit">Edit category</a>
     </p>
 
+    <% if (deleteError) { %>
+  <p><%= deleteError %></p>
+<% } %>
+
+<form
+  method="post"
+  action="/categories/<%= category.id %>/delete"
+>
+  <button type="submit">Delete category</button>
+</form>
+
     <p>
       <a href="/games/new">Add a game</a>
     </p>

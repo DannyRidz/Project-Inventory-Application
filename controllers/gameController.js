@@ -179,6 +179,12 @@ exports.gameUpdatePost = async (req, res) => {
   res.redirect(`/games/${game.id}`);
 };
 
-exports.gameDeletePost = (req, res) => {
-  res.send(`Delete game with ID: ${req.params.id}`);
+exports.gameDeletePost = async (req, res) => {
+  const game = await db.deleteGame(req.params.id);
+
+  if (!game) {
+    return res.status(404).send("Game not found");
+  }
+
+  res.redirect("/games");
 };

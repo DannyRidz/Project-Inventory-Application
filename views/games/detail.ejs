@@ -36,7 +36,14 @@
       <dd><%= game.stock_quantity %></dd>
     </dl>
 
-    <a href="/games/<%= game.id %>/edit">Edit game</a>
+    <p>
+  <a href="/games/<%= game.id %>/edit">Edit game</a>
+</p>
+
+<form method="post" action="/games/<%= game.id %>/delete">
+  <button type="submit">Delete game</button>
+</form>
+    
   </main>
 </body>
 </html>

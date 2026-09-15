@@ -132,6 +132,24 @@ async function updateGame(
   return rows[0];
 }
 
+async function deleteCategory(id) {
+  const { rows } = await pool.query(
+    "DELETE FROM categories WHERE id = $1 RETURNING id",
+    [id],
+  );
+
+  return rows[0];
+}
+
+async function deleteGame(id) {
+  const { rows } = await pool.query(
+    "DELETE FROM games WHERE id = $1 RETURNING id",
+    [id],
+  );
+
+  return rows[0];
+}
+
 module.exports = {
   getAllCategories,
   getCategoryById,
@@ -142,4 +160,6 @@ module.exports = {
   updateCategory,
   createGame,
   updateGame,
+  deleteCategory,
+  deleteGame,
 };

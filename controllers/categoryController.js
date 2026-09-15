@@ -38,6 +38,7 @@ exports.categoryDetail = async (req, res) => {
     title: category.name,
     category,
     games,
+    deleteError: null,
   });
 };
 
@@ -151,6 +152,27 @@ exports.categoryUpdatePost = async (req, res) => {
   }
 };
 
-exports.categoryDeletePost = (req, res) => {
-  res.send(`Delete category with ID: ${req.params.id}`);
+exports.categoryDeletePost = async (req, res) => {
+  const categoryId = req.params.id;
+
+  const [category, games] = await Promise.all([
+    db.getCategoryById(categoryId),
+    db.getGamesByCategoryId(categoryId),
+  ]);
+
+  if (!category) {
+    return res.status(404).send("Category not found");
+  }
+
+  if (games.length > 0) {
+    return res.status(409).render("categories/detail", {
+      title: category.name,
+      category,
+      games,
+      deleteError: "This category cannot be deleted while it contains games.",
+    });
+  }
+
+  await db.deleteCategory(categoryId);
+  res.redirect("/categories");
 };
