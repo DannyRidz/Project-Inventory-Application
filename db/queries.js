@@ -29,8 +29,44 @@ async function getGamesByCategoryId(categoryId) {
   return rows;
 }
 
+async function getAllGames() {
+  const { rows } = await pool.query(
+    `SELECT games.id,
+            games.title,
+            games.price,
+            games.stock_quantity,
+            categories.id AS category_id,
+            categories.name AS category_name
+     FROM games
+     JOIN categories ON categories.id = games.category_id
+     ORDER BY games.title`,
+  );
+
+  return rows;
+}
+
+async function getGameById(id) {
+  const { rows } = await pool.query(
+    `SELECT games.id,
+            games.title,
+            games.description,
+            games.price,
+            games.stock_quantity,
+            categories.id AS category_id,
+            categories.name AS category_name
+     FROM games
+     JOIN categories ON categories.id = games.category_id
+     WHERE games.id = $1`,
+    [id],
+  );
+
+  return rows[0];
+}
+
 module.exports = {
   getAllCategories,
   getCategoryById,
   getGamesByCategoryId,
+  getAllGames,
+  getGameById,
 };

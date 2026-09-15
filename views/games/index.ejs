@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+</head>
+<body>
+  <header>
+    <h1><%= title %></h1>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="/categories">Categories</a>
+      <a href="/games">Games</a>
+    </nav>
+  </header>
+
+  <main>
+    <% if (games.length === 0) { %>
+      <p>No games have been added yet.</p>
+    <% } else { %>
+      <ul>
+        <% games.forEach((game) => { %>
+          <li>
+            <a href="/games/<%= game.id %>"><%= game.title %></a>
+            — $<%= Number(game.price).toFixed(2) %>
+            — <%= game.stock_quantity %> in stock
+            — <a href="/categories/<%= game.category_id %>">
+              <%= game.category_name %>
+            </a>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <a href="/games/new">Add a game</a>
+  </main>
+</body>
+</html>

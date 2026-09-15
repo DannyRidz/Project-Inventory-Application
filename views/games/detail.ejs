@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+</head>
+<body>
+  <header>
+    <h1><%= game.title %></h1>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="/categories">Categories</a>
+      <a href="/games">Games</a>
+    </nav>
+  </header>
+
+  <main>
+    <% if (game.description) { %>
+      <p><%= game.description %></p>
+    <% } %>
+
+    <dl>
+      <dt>Category</dt>
+      <dd>
+        <a href="/categories/<%= game.category_id %>">
+          <%= game.category_name %>
+        </a>
+      </dd>
+
+      <dt>Price</dt>
+      <dd>$<%= Number(game.price).toFixed(2) %></dd>
+
+      <dt>Stock quantity</dt>
+      <dd><%= game.stock_quantity %></dd>
+    </dl>
+
+    <a href="/games/<%= game.id %>/edit">Edit game</a>
+  </main>
+</body>
+</html>
